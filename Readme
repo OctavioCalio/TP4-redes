@@ -1,0 +1,186 @@
+## TP4 - Redes
+_____________________________________________________________________
+## Instalación: 
+_____________________________________________________________________
+## Rápida:
+npm install
+
+## Para cada microservicio:
+npm install
+cd gateway && npm install
+cd ../servicio-lugares && npm install
+cd ../servicio-ubicacion && npm install
+cd ../servicio-ia && npm install
+_____________________________________________________________________
+## Iniciar servicio de autenticación y gateway
+cd gateway
+node gateway.js & node index.js 
+## Iniciar servicio de lugares
+cd servicio-lugares
+node lugares.js
+## Iniciar servicio de ubicación
+cd servicio-ubicacion
+node ubicacion.js
+## Iniciar servicio de inteligencia artificial
+cd servicio-ia
+node ia.js
+
+
+
+_____________________________________________________________________
+## Estructura:
+_____________________________________________________________________
+
+TP4Redes/
+├── .env
+├── package.json
+├── package-lock.json
+│
+├── gateway/
+│   ├── gateway.js
+│   ├── index.js
+│   ├── db.js
+│   └── usuarios/
+│       └── usuarios.js
+│
+├── servicio-lugares/
+│   └── lugares.js
+│
+├── servicio-ubicacion/
+│   └── ubicacion.js
+│
+└── servicio-ia/
+    └── ia.js
+
+_____________________________________________________________________
+## Tecnologías Usadas
+_____________________________________________________________________
+
+### Backend
+- Node.js como entorno de ejecución
+- Express.js para crear los servidores y APIs
+- MongoDB para base de datos de usuarios
+
+### Autenticación y Seguridad
+- JWT (JSON Web Tokens) para manejo de sesiones
+- Cors para control de acceso HTTP
+
+### APIs Externas
+- Google Places API para búsqueda de establecimientos
+- Google Distance Matrix API para cálculo de distancias
+- Cohere API para procesamiento de lenguaje natural
+
+### Otras Dependencias
+- Axios para peticiones HTTP
+- Dotenv para manejo de variables de entorno
+- Path para manejo de rutas de archivos
+
+_____________________________________________________________________
+
+## Descripción general del trabajo:
+_____________________________________________________________________
+
+
+El sistema consiste en una aplicación con arquitectura de microservicios
+que hace uso de tres APIs: Google Places, Google Distance Matrix y Cohere
+
+La idea es que el usuario sea capaz de preguntar directamente y en lenguaje natural a la inteligencia artificial por un tipo de comercio general
+(por ejemplo, restaurante, pizzería, ferretería, etc.) o por uno en específico, pasando el nombre del mismo, y la IA va a consultar las 
+APIs de google, elegir los más significativos y devolver la información relevante al usuario (nombre, dirección, horario, distancia, etc.). 
+
+_____________________________________________________________________
+
+
+### El sistema integra:
+
+- Backend desarrollado en Node.js
+- API REST para la comunicación entre servicios
+- API Gateway para gestión centralizada de peticiones
+- Autenticación con JWT para proteger los endpoints DEL GATEWAY
+- Base de datos MongoDB para gestión de usuarios
+- Integración con APIs externas:
+  - Google Places para búsqueda de establecimientos
+  - Google Distance Matrix para cálculo de distancias
+  - Cohere para procesamiento de lenguaje natural
+
+_____________________________________________________________________
+## La estructura de los microservicios:
+_____________________________________________________________________
+
+
+
+### Servicio de Autenticación (Puerto 3004)
+- API REST para gestión de usuarios
+- Maneja registro y login
+- Genera tokens JWT
+- Conecta con MongoDB para persistencia de datos
+
+### API Gateway (Puerto 3000)
+- Punto de entrada único al sistema
+- Valida tokens JWT
+- Redirige peticiones a los servicios correspondientes
+- Maneja el enrutamiento y la seguridad
+
+>> Solo los endpoints de gateway están protegidos.
+
+### Servicio de Lugares (Puerto 3002)
+- Integra con Google Places API
+- Busca establecimientos según criterios del usuario
+- Devuelve información detallada de cada lugar (nombre, dirección, valoraciones, etc.)
+  
+### Servicio de Ubicación (Puerto 3001)
+- Integra con Google Distance Matrix API
+- Calcula distancias entre la ubicación del usuario y los lugares encontrados
+
+>> El origen - la ubicación del usuario - por defecto 
+está harcodeada en el código (Inst. Leibnitz | -32.396450, -63.244248 ). Tanto en el servicio de lugares como en el de ubicación.
+
+### Servicio de IA (Puerto 3003)
+- Integra con Cohere API
+- Procesa consultas en lenguaje natural
+- Intenta analizar y formatear los resultados de manera amigable para
+el usuario; siguiendo el prompt dado.
+
+>> La IA puede responder por fuera del prompt en ocaciones. 
+Además, las respuestas están limitadas por la cantidad de 
+tokens. Así que es esperable que algunas respuestas no estén 
+completas.
+
+_____________________________________________________________________
+## Los endpoints (gateway): 
+_____________________________________________________________________
+
+
+### Públicos: 
+
+- POST `/index/registro`
+  - Registro de nuevos usuarios
+  - Body: { nombre, email, password }
+  - Retorna: token JWT
+
+- POST `/index/login`
+  - Inicio de sesión
+  - Body: { email, password }
+  - Retorna: token JWT
+
+### Protegidos (jwt): 
+
+- GET `/lugares`
+  - Búsqueda de lugares cercanos
+  - Query params: busqueda, location
+  - Retorna: lista de lugares con detalles
+
+- GET `/distancia`
+  - Cálculo de distancias
+  - Query params: lugares (array de place_ids)
+  - Retorna: distancias desde el punto de origen
+
+- POST `/ia`
+  - Consultas en lenguaje natural
+  - Body: { pregunta, ubicacion }
+  - Retorna: respuesta procesada por IA
+
+
+## Ejemplos de uso
+
+En la carpeta 'postman' está la colección de postman para importar y probar los endpoints.

@@ -1,0 +1,194 @@
+{
+	"info": {
+		"_postman_id": "02de38b9-912e-4258-852c-18ac41e92066",
+		"name": "TP4 Redes",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "34539932",
+		"_collection_link": "https://orange-flare-740829.postman.co/workspace/New-Team-Workspace~9bd5c2ed-ee9c-4e59-b335-c173fb4f778b/collection/34539932-02de38b9-912e-4258-852c-18ac41e92066?action=share&source=collection_link&creator=34539932"
+	},
+	"item": [
+		{
+			"name": "http://localhost:3000/index/registro",
+			"request": {
+				"auth": {
+					"type": "inherit"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"nombre\":\"UsuarioPrueba\",\r\n    \"email\": \"usuarioPrueba@gmail.com\",\r\n    \"password\": \"123456\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/index/registro",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"index",
+						"registro"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/index/login",
+			"request": {
+				"auth": {
+					"type": "inherit"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n \"email\": \"usuarioPrueba@gmail.com\",\r\n \"password\":\"123456\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/index/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"index",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Buscar lugares - usamos el gateway",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "text"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/lugares?busqueda=pizzeria&location=-32.396450,-63.244248",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"lugares"
+					],
+					"query": [
+						{
+							"key": "busqueda",
+							"value": "pizzeria"
+						},
+						{
+							"key": "location",
+							"value": "-32.396450,-63.244248"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Consulta a ubicación cargando lugares para obtener distancias",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "inherit"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/distancia?lugares=[{ \"place_id\":\"ChIJKTnUCt1CzJURkxf_rSMt0d0\", \"geometry\":{ \"location\":{ \"lat\":-32.4085833, \"lng\":-63.2408275 } }}]",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"distancia"
+					],
+					"query": [
+						{
+							"key": "lugares",
+							"value": "[{ \"place_id\":\"ChIJKTnUCt1CzJURkxf_rSMt0d0\", \"geometry\":{ \"location\":{ \"lat\":-32.4085833, \"lng\":-63.2408275 } }}]"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:3000/ia/consulta     - Consultamos a la IA desde el gateway",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"pregunta\": \"Busco zapaterías cerca\",\r\n    \"ubicacion\": \"-32.396450,-63.244248\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/ia",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"ia"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
